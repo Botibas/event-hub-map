@@ -8,7 +8,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('map', function (\App\Services\EventHubService  $eventHubService) {
-//    $events = $eventHubService->fetchEvents(); // or whatever method you created
+//    $events = $eventHubService->fetchEvents();
 //    dd($events); // dump results for testing
 
     return Inertia::render('Map');

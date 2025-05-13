@@ -21,6 +21,8 @@ class EventHubService
             'endIndex'   => 9,
         ]);
 
+        dd($response->body()); // dump response for testing
+
         if ($response->successful()) {
             return $response->json();
         }
