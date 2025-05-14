@@ -11,6 +11,9 @@ import { initializeTheme } from './composables/useAppearance';
 // ⬇️ Leaflet components
 import { LMap, LTileLayer, LGeoJson } from '@vue-leaflet/vue-leaflet';
 
+// ⬇️ Import Pinia
+import { createPinia } from 'pinia';
+
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
     interface ImportMetaEnv {
@@ -35,6 +38,9 @@ createInertiaApp({
         ),
     setup({ el, App, props, plugin }) {
         const vueApp = createApp({ render: () => h(App, props) });
+
+        // ⬇️ Initialize Pinia before mounting the app
+        vueApp.use(createPinia());
 
         vueApp.use(plugin).use(ZiggyVue);
 

@@ -40,7 +40,7 @@ import { Head, Link } from '@inertiajs/vue3';
                 >
                     <h1 class="mb-1 font-medium">Let's get started</h1>
                     <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        Laravel has an incredibly rich ecosystem. <br />We suggest starting with the following.
+                        The EventHub guides you in the Krefeld Area. <br />We suggest starting with the following.
                     </p>
                     <ul class="mb-4 flex flex-col lg:mb-6">
                         <li
@@ -54,13 +54,13 @@ import { Head, Link } from '@inertiajs/vue3';
                                 </span>
                             </span>
                             <span>
-                                Read the
+                                Create your account
                                 <a
-                                    href="https://laravel.com/docs"
+                                    :href="route('register')"
                                     target="_blank"
                                     class="ml-1 inline-flex items-center space-x-1 font-medium text-[#f53003] underline underline-offset-4 dark:text-[#FF4433]"
                                 >
-                                    <span>Documentation</span>
+                                    <span>Register</span>
                                     <svg
                                         width="{10}"
                                         height="{11}"
