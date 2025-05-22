@@ -49,11 +49,21 @@
 </template>
 <script setup lang="ts">
 import { LucideStar, LucideMapPin, LucideMessageCircle } from 'lucide-vue-next';
-const location = {
+
+type Location = {
+    image: string | null;
+    name: string;
+    subtitle: string;
+    score: number;
+    description: string;
+};
+
+const location: Location = {
     image: null,
     name: "Kulturfabrik Krefeld",
     subtitle: "Live music Venue",
     score: 4.8,
     description: "Seit 1903 dient die frühere Verkaufsstätte des Krefelder Schlathofs als Veranstaltungsort."
-}
+};
 </script>
+

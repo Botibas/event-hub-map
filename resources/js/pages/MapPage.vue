@@ -24,7 +24,7 @@ onMounted(() => {
         <div class="flex h-screen flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="z-0 relative h-screen flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
                 <Map :coords="[locationStore.coordinates?.latitude, locationStore.coordinates?.longitude]" />
-                <EventInfoCard class="ml-auto mt-5 mr-5" />
+                <EventInfoCard class="z-[1000] absolute top-2 right-2" />
             </div>
         </div>
     </AppLayout>

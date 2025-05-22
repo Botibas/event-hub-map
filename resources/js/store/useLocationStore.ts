@@ -13,7 +13,6 @@ export const useLocationStore = defineStore('location', {
                 const response = await axios.get('/geocode', { params: { location } })
                 const data = response.data
                 if (data?.latitude && data?.longitude) {
-                    console.log("test")
                     this.coordinates = {
                         latitude: data.latitude,
                         longitude: data.longitude,
