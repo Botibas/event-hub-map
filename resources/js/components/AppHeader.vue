@@ -21,6 +21,8 @@ import { LayoutGrid, Menu, Search } from 'lucide-vue-next';
 import { computed } from 'vue';
 import SearchInput from "@/components/ui/search-input/SearchInput.vue";
 import {useLocationStore} from "@/store/useLocationStore";
+import axios from "axios";
+import {useEventHubStore} from "@/store/useEventHubStore";
 
 interface Props {
     breadcrumbs?: BreadcrumbItem[];
@@ -45,12 +47,18 @@ const mainNavItems: NavItem[] = [
         href: '/map',
         icon: LayoutGrid,
     },
+    {
+        title: 'Events',
+        href: '/events',
+        icon: LayoutGrid
+    }
 ];
 
 const locationStore = useLocationStore();
+const evenHubStore = useEventHubStore();
 
-const searchGeoLocation = (query: string) => {
-    locationStore.searchCoordinates(query);
+const searchEventHub = (query: string) => {
+    evenHubStore.getNextEvent(query)
 };
 </script>
 
@@ -117,7 +125,7 @@ const searchGeoLocation = (query: string) => {
 
                 <div class="ml-auto flex items-center space-x-2">
                     <div class="relative flex items-center space-x-1">
-                        <SearchInput @search="searchGeoLocation" no-debounce></SearchInput>
+                        <SearchInput @search="searchEventHub" no-debounce></SearchInput>
                     </div>
 
                     <DropdownMenu>
