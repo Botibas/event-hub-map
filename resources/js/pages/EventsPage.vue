@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import { useEventHubStore } from '@/store/useEventHubStore';
 
@@ -30,7 +30,7 @@ function formatDate(dateStr: string | null | undefined) {
 function goToMap(event: typeof eventHubStore.events[number]) {
     if (!event.venue?.name) return;
     eventHubStore.setDisplayedEvent(event);  // Event setzen im Store
-    Inertia.visit(`/map?venue=${encodeURIComponent(event.venue.name)}`);
+    router.visit(`/map?venue=${encodeURIComponent(event.venue.name)}`);
 }
 </script>
 
