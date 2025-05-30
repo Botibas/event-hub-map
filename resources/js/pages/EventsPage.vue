@@ -12,7 +12,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 const eventHubStore = useEventHubStore();
 
 onMounted(() => {
-    eventHubStore.getAllEvents('', 10);
+    eventHubStore.getAllEvents('', 9);
 });
 
 function formatDate(dateStr: string | null | undefined) {

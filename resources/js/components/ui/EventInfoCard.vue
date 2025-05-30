@@ -27,7 +27,7 @@
             </div>
 
             <!-- Description -->
-            <p class="text-sm text-gray-700 overflow-y-auto max-h-32">
+            <p class="text-sm text-gray-700 overflow-y-auto max-h-64">
                 {{ eventHubStore.displayedEvent?.description }}
             </p>
         </div>
