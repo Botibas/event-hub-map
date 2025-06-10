@@ -25,41 +25,33 @@ export const useEventHubStore = defineStore('eventHub', {
     state: () => ({
         events: [] as Event[],
         displayedEvent: null as Event | null,
+        displayedEvents: null as Event[] | null,
         coordinates: null as { latitude: number; longitude: number; formattedAddress: string } | null,
         error: null as string | null,
         loading: false,
     }),
     actions: {
-        async getNextEvent(query: string) {
+        async getNextEvents(query: string, start?: string | null, end?: string | null) {
             const locationStore = useLocationStore();
-            this.loading = true;
-            this.error = null;
-
             try {
-                const response = await axios.get('/eventhub/next', {
-                    params: { query },
-                });
-
-                const event = response.data as Event;
-                this.displayedEvent = event;
-                console.log('Next event:', event.venue.name);
-                await locationStore.searchCoordinates(event.venue.name);
-                this.coordinates = locationStore.coordinates;
-
+                await this.getAllEvents(query, start, end)
+                locationStore.searchFoundEventsCoordinates(this.events);
+                const event = this.events[0] as Event;
+                if (event && event.venue && event.venue.name) {
+                    this.displayedEvents = [event];
+                }
             } catch (error) {
-                this.error = 'Error fetching data';
-                console.error('Error fetching event hub:', error);
-            } finally {
-                this.loading = false;
+                this.error = 'Error fetching next events';
+                console.error('Error fetching next events:', error);
             }
         },
-        async getAllEvents(query?: string, limit: number = 5) {
+        async getAllEvents(query: string, start?: string | null, end?: string | null, limit: number = 9) {
             this.loading = true;
             this.error = null;
 
             try {
                 const response = await axios.get('/eventhub/upcoming', {
-                    params: { query, limit }
+                    params: { query, start, end, limit }
                 });
 
                 this.events = response.data as Event[];

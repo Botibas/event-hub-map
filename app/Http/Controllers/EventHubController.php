@@ -41,14 +41,10 @@ class EventHubController extends Controller {
     {
         $search = request()->query('query', '');
         $limit = (int) request()->query('limit', 5);
+        $start = request()->query('start', null);
+        $end = request()->query('end', null);
 
-        $events = $this->eventHubService->getNextUpcomingEvents($search, $limit);
-
-        if (empty($events)) {
-            return response()->json([
-                'error' => 'No upcoming events found'
-            ], 404);
-        }
+        $events = $this->eventHubService->getNextUpcomingEvents($search, $start, $end, $limit);
 
         return response()->json($events);
     }

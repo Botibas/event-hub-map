@@ -44,5 +44,59 @@ class GeoLocationService
         // Return null if there are no results or an error occurs
         return null;
     }
+
+    // Function to get coordinates for multiple location
+    public function getMultipleCoordinates($locations): ?array {
+        $results = [];
+        $cache = [];
+        $skipped = 0;
+
+        foreach ($locations as $location) {
+            // Check if a similar location has already been processed
+            $matched = null;
+            foreach ($cache as $cachedLocation => $cachedResult) {
+                // You can adjust the similarity threshold as needed (0 = exact, 1 = totally different)
+                similar_text(strtolower($location), strtolower($cachedLocation), $percent);
+                if ($percent > 85) { // 85% similarity threshold
+                    $matched = $cachedResult;
+                    break;
+                }
+            }
+
+            if ($matched) {
+                $results[] = $matched;
+                $skipped++;
+                continue;
+            }
+
+            // Make the API request
+            $response = Http::get('https://api.opencagedata.com/geocode/v1/json', [
+                'q' => $location,
+                'key' => $this->apiKey,
+                'language' => 'en',
+                'no_annotations' => 1,
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                if (isset($data['results'][0])) {
+                    $geometry = $data['results'][0]['geometry'];
+                    $result = [
+                        'latitude' => $geometry['lat'],
+                        'longitude' => $geometry['lng'],
+                        'formatted_address' => $data['results'][0]['formatted'],
+                    ];
+
+                    // Save to both results and cache
+                    $results[] = $result;
+                    $cache[$location] = $result;
+                }
+            }
+        }
+
+
+        return $results;
+    }
 }
 

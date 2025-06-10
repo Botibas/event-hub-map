@@ -18,6 +18,8 @@ Route::get('events', function () {
 })->middleware(['auth', 'verified'])->name('events');
 
 Route::get('/geocode', GeoLocationController::class)->middleware(['auth', 'verified'])->name('geocode');
+Route::post('/geocodes', [GeoLocationController::class, 'getMultipleCoordinates'])
+    ->middleware(['auth', 'verified'])->name('geocodes');
 
 
 Route::middleware(['auth', 'verified'])

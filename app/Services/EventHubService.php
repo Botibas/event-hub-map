@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class EventHubService
@@ -34,30 +35,47 @@ class EventHubService
 
     public function getNextUpcomingEvent(string $search = null): ?array
     {
-        $events = $this->getNextUpcomingEvents($search, 1);
+        $events = $this->getNextUpcomingEvents($search, null, null, 1);
         return $events[0] ?? null;
     }
 
-    public function getNextUpcomingEvents(string $search = null, int $limit = 5): array
+    public function getNextUpcomingEvents(string $search = null, $start = null, $end = null, int $limit = null): array
     {
+        if ($search === null) {
+            $search = '';
+        }
         $data = $this->fetchEvents($search);
 
         if (empty($data['collection'])) {
             return [];
         }
 
-        $now = now();
+        if ($start) $start = Carbon::parse($start);
+        if ($end) $end = Carbon::parse($end);
 
         return collect($data['collection'])
-            ->filter(function ($event) use ($now) {
+            ->filter(function ($event) use ($start, $end) {
                 if (empty($event['schedule']['start'])) {
                     return false;
                 }
-                $start = \Illuminate\Support\Carbon::parse($event['schedule']['start']);
-                return $start->isFuture();
+                $eventStart = Carbon::parse($event['schedule']['start']);
+
+                if ($start || $end) {
+                    if ($start && $eventStart->lessThanOrEqualTo($start)) {
+                        return false;
+                    }
+                    if ($end && $eventStart->greaterThanOrEqualTo($end)) {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                return $eventStart->isFuture();
+
             })
             ->sortBy(function ($event) {
-                return \Illuminate\Support\Carbon::parse($event['schedule']['start']);
+                return Carbon::parse($event['schedule']['start']);
             })
             ->take($limit)
             ->values()

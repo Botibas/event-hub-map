@@ -57,8 +57,11 @@ const mainNavItems: NavItem[] = [
 const locationStore = useLocationStore();
 const evenHubStore = useEventHubStore();
 
-const searchEventHub = (query: string) => {
-    evenHubStore.getNextEvent(query)
+const searchEventHub = (query: any) => {
+    const searchQuery = query[0] || ''
+    const startDate = query[1] || null
+    const endDate = query[2] || null
+    evenHubStore.getNextEvents(searchQuery, startDate, endDate)
 };
 </script>
 

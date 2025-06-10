@@ -3,6 +3,7 @@ import { ref, watch } from 'vue';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-vue-next';
+import { TimeFieldInput, TimeFieldRoot } from 'reka-ui';
 
 const emit = defineEmits<{
     (e: 'search', value: string): void;
@@ -10,6 +11,8 @@ const emit = defineEmits<{
 
 const showSearch = ref(false);
 const searchQuery = ref('');
+const start = ref(null);
+const end = ref(null);
 const debouncedQuery = ref('');
 const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
@@ -18,7 +21,7 @@ const { noDebounce } = defineProps<{
 }>();
 
 const triggerSearch = () => {
-    emit('search', searchQuery.value);
+    emit('search', [searchQuery.value, start.value, end.value]);
 };
 
 watch(searchQuery, (val) => {
@@ -36,6 +39,20 @@ watch(searchQuery, (val) => {
         <Transition name="fade" mode="out-in">
             <div :key="showSearch ? 'search' : 'button'">
                 <div v-if="showSearch" class="flex items-center space-x-2">
+                    <Input
+                        v-model="start"
+                        type="date"
+                        placeholder="Start Date"
+                        class="h-9 w-40"
+                        @update:model-value="triggerSearch"
+                    />
+                    <Input
+                        v-model="end"
+                        type="date"
+                        placeholder="End Date"
+                        class="h-9 w-40"
+                        @update:model-value="triggerSearch"
+                    />
                     <Input
                         v-model="searchQuery"
                         placeholder="Search..."

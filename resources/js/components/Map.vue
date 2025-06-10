@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isValidCenter(center)" class="w-full h-[calc(100vh-100px)]">
+    <div v-if="!locationStore.loading && isValidCenter(center)" class="w-full h-[calc(100vh-100px)]">
         <l-map
             :zoom="13"
             :center="center"
@@ -11,7 +11,14 @@
                 url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                 attribution='&copy; OpenStreetMap &copy; CARTO'
             />
-            <l-marker ref="markerRef" :lat-lng="center" :icon="customIcon" />
+            <l-marker
+                v-for="(coords, i) in locationStore.coordinatesArray"
+                :key="i"
+                ref="markerRef"
+                :lat-lng="[coords.latitude, coords.longitude]"
+                :icon="customIcon"
+                @click="handleMarkerClick(coords)"
+            />
         </l-map>
     </div>
 </template>
@@ -20,18 +27,11 @@
 import { computed, ref } from 'vue';
 import { LMarker } from '@vue-leaflet/vue-leaflet';
 import L from 'leaflet';
+import { useLocationStore } from '@/store/useLocationStore';
+import { useEventHubStore } from '@/store/useEventHubStore';
 
-// Props definieren mit Default als Tuple
-const props = withDefaults(defineProps<{
-    coords?: [number, number];
-}>(), {
-    coords: [51.3344, 6.5857] as [number, number]
-});
-
-// Center als computed-Tuple, garantiert gültig
-const center = computed<[number, number]>(() => {
-    return props.coords ?? [51.3344, 6.5857];
-});
+const locationStore = useLocationStore();
+const eventHubStore = useEventHubStore();
 
 const isValidCenter = (val: unknown): val is [number, number] => {
     return Array.isArray(val)
@@ -40,6 +40,16 @@ const isValidCenter = (val: unknown): val is [number, number] => {
         && typeof val[1] === 'number'
         && val[0] !== null
         && val[1] !== null;
+};
+
+const center = computed<[number, number]>(() => {
+    const coordinates = locationStore.coordinatesArray[0];
+    return coordinates ? [coordinates.latitude, coordinates.longitude] : [51.3344, 6.5857];
+});
+
+const handleMarkerClick = (coords: any) => {
+    console.log('Marker clicked', coords.latitude, coords.longitude);
+    eventHubStore.displayedEvents = coords.events;
 };
 
 
