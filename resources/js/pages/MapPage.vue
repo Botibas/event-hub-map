@@ -5,7 +5,6 @@ import { Head, usePage } from '@inertiajs/vue3';
 import Map from "@/components/Map.vue";
 import { onMounted } from "vue";
 import { useLocationStore } from "@/store/useLocationStore";
-import EventInfoCard from "@/components/ui/EventInfoCard.vue";
 import {useEventHubStore} from "@/store/useEventHubStore";
 import EventsInfoCard from '@/components/ui/EventsInfoCard.vue';
 
@@ -36,7 +35,6 @@ onMounted(async () => {
         <div class="flex h-screen flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="z-0 relative h-screen flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
                 <Map />
-                <EventInfoCard v-if="eventHubStore.displayedEvent" :event="eventHubStore.displayedEvent" class="z-[1000] absolute top-2 right-2" />
                 <EventsInfoCard v-if="eventHubStore.displayedEvents" class="z-[1000] absolute top-2 right-2" />
             </div>
         </div>

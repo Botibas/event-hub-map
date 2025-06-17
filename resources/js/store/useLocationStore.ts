@@ -63,8 +63,6 @@ export const useLocationStore = defineStore('location', {
                         });
                     }
                 });
-
-                console.log(this.coordinatesArray);
             } catch (err) {
                 this.error = 'Error fetching data';
                 console.error(err);

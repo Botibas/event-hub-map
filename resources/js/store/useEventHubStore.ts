@@ -64,9 +64,6 @@ export const useEventHubStore = defineStore('eventHub', {
             } finally {
                 this.loading = false;
             }
-        },
-        setDisplayedEvent(event: Event) {
-            this.displayedEvent = event;
-        },
+        }
     },
 })

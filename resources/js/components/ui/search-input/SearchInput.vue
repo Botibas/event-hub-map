@@ -9,7 +9,7 @@ const emit = defineEmits<{
     (e: 'search', value: string): void;
 }>();
 
-const showSearch = ref(false);
+const showSearch = ref(true);
 const searchQuery = ref('');
 const start = ref(null);
 const end = ref(null);

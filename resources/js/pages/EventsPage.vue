@@ -4,12 +4,14 @@ import { type BreadcrumbItem } from '@/types';
 import { router } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import { useEventHubStore } from '@/store/useEventHubStore';
+import {useLocationStore} from "@/store/useLocationStore";
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Events', href: '/events' },
 ];
 
 const eventHubStore = useEventHubStore();
+const locationStore = useLocationStore();
 
 onMounted(() => {
     eventHubStore.getAllEvents('', 9);
@@ -29,7 +31,17 @@ function formatDate(dateStr: string | null | undefined) {
 
 function goToMap(event: typeof eventHubStore.events[number]) {
     if (!event.venue?.name) return;
-    eventHubStore.setDisplayedEvent(event);  // Event setzen im Store
+    eventHubStore.displayedEvents = [event]
+    const matchedCoords = locationStore.coordinatesArray.find((coord) =>
+        coord.events?.some((e: any) => e.title === event.title)
+    );
+    if (matchedCoords) {
+        eventHubStore.coordinates = {
+            latitude: matchedCoords.latitude,
+            longitude: matchedCoords.longitude,
+            formattedAddress: matchedCoords.formattedAddress || '',
+        };
+    }
     router.visit(`/map?venue=${encodeURIComponent(event.venue.name)}`);
 }
 </script>
