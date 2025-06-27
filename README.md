@@ -95,7 +95,7 @@ npm run dev
 ```
 
 ### Testing
-test
+
 Run tests with:
 
 ```bash
