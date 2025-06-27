@@ -11,6 +11,8 @@ Event Hub Map is a web application that integrates with the Event Hub API to fet
 
 The application is designed to help users discover local events in Krefeld and find their locations easily.
 
+![eventhub-screenshot.png](eventhub-screenshot.png)
+
 ## Features
 
 - Interactive map showing event locations
@@ -86,19 +88,7 @@ The application is designed to help users discover local events in Krefeld and f
 
 ### Development
 
-To start the development server:
-
-```bash
-composer dev
-```
-
-This command will concurrently run:
-- Laravel development server
-- Queue listener
-- Log watcher
-- Vite development server
-
-For frontend development only:
+To start the application in development mode, run:
 
 ```bash
 npm run dev
